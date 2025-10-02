@@ -23,4 +23,12 @@ class CityControllerTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$").isArray());
     }
+    @Test
+    void getCitiesLoadsFromResource() throws Exception {
+        mockMvc.perform(get("/api/cities"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].name").exists())   // attends que la ressource contienne au moins une ville avec "name"
+                .andExpect(jsonPath("$[0].zipCode").exists());
+    }
 }
