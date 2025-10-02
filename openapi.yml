@@ -1,0 +1,156 @@
+openapi: 3.0.2
+info:
+  title: Cities API
+  version: 1.0.0
+  description: Manage cities
+paths:
+  /api/cities:
+    summary: Path used to manage the list of cities.
+    description: The REST endpoint/path used to search cities by criterias
+    get:
+      operationId: getCities
+      summary: List All cities
+      description: |
+        The REST endpoint/path used to search cities by criterias
+        Criterias namePattern, and zipCodePattern are used to filters the results
+        Criterias _limit, _start, _sort, and _order are used to paginate the results
+        None of these criteria is required
+        All criterias can be combined
+      parameters:
+      - name: namePattern
+        description: Wildcard pattern to search by name case insensitive, default is `*` if parameter is not set
+        example: PAR*
+        schema:
+          type: string
+        in: query
+        required: false
+      - name: zipCodePattern
+        description: Wildcard pattern to search by zipCode case insensitive, default is `*` if parameter is not set
+        example: 75*
+        schema:
+          type: string
+        in: query
+        required: false
+      - name: _limit
+        description: Size of the result, default is no limit, must be positive if set
+        example: 10
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: _start
+        description: Index of the first result, default is 0, must be positive if set
+        example: 10
+        schema:
+          type: integer
+        in: query
+        required: false
+      - name: _sort
+        description: Sort by property name, default is no sort
+        example: name
+        schema:
+          enum:
+          - name
+          - zipCode
+          type: string
+        in: query
+        required: false
+      - name: _order
+        description: Sort direction asc or desc, default is desc
+        example: asc
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        in: query
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                description: Total number of cities that respect filtering criterias, present only when _limit and/or _start are sets
+          description: Successful response - returns an array of `City` entities.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+          description: Invalid parameters
+  /api/cities/nearest:
+    summary: Path used to search nearest cities.
+    description: The REST endpoint/path used to search `City` entities.
+    get:
+      parameters:
+      - name: x
+        description: x coordinate point
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: y
+        description: y coordinate point
+        schema:
+          type: string
+        in: query
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/City'
+          description: Successful response - returns the nearest `City`.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+          description: Invalid parameters
+      operationId: nearestCity
+      summary: Search the nearest city
+      description: Search a `City` entity.
+components:
+  schemas:
+    Point:
+      title: Coordinate point
+      description: Point object
+      required: []
+      type: object
+      properties:
+        x:
+          description: x parameter
+          type: string
+        y:
+          description: y parameter
+          type: string
+    City:
+      title: Root Type for City
+      description: City object
+      required: []
+      type: object
+      properties:
+        name:
+          description: city name
+          type: string
+        zipCode:
+          description: zip code
+          type: string
+        coordinates:
+          description: coordinates
+          $ref: '#/components/schemas/Point'
+    BadRequestErrorResponse:
+      description: error response
+      type: object
+      properties:
+        description:
+          description: ''
+          type: string
