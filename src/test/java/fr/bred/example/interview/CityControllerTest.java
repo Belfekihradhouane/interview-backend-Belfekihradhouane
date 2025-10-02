@@ -1,6 +1,7 @@
 package fr.bred.example.interview;
 
 
+import fr.bred.example.interview.controller.CityController;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest // on veut tester le contrôleur (il n'existe pas encore -> test "rouge")
+@WebMvcTest(CityController.class) // Correction : cible explicitement le contrôleur
 class CityControllerTest {
 
     @Autowired
