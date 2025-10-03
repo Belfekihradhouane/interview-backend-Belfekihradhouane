@@ -1,16 +1,17 @@
 package fr.bred.example.interview;
 
-
-import fr.bred.example.interview.controller.CityController;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(CityController.class) // Correction : cible explicitement le contrôleur
+@SpringBootTest
+@AutoConfigureMockMvc
 class CityControllerTest {
 
     @Autowired
@@ -30,5 +31,16 @@ class CityControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].name").exists())   // attends que la ressource contienne au moins une ville avec "name"
                 .andExpect(jsonPath("$[0].zipCode").exists());
+    }
+
+    @Test
+    void getCitiesReturnsJsonFromResource() throws Exception {
+        mockMvc.perform(get("/api/cities"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("MAROLLES SOUS LIGNIERES"))
+                .andExpect(jsonPath("$[0].zipCode").value("10130"))
+                .andExpect(jsonPath("$[1].name").value("LES GRANDES CHAPELLES"))
+                .andExpect(jsonPath("$[1].zipCode").value("10170"));
     }
 }
