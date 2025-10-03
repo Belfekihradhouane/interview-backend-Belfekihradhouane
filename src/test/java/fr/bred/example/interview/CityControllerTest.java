@@ -43,4 +43,21 @@ class CityControllerTest {
                 .andExpect(jsonPath("$[1].name").value("LES GRANDES CHAPELLES"))
                 .andExpect(jsonPath("$[1].zipCode").value("10170"));
     }
+    @Test
+    void getCitiesWithNamePatternFiltersResults() throws Exception {
+        mockMvc.perform(get("/api/cities").param("namePattern", "MAR*"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("MAROLLES SOUS LIGNIERES"))
+                .andExpect(jsonPath("$[1]").doesNotExist());
+    }
+
+    @Test
+    void getCitiesWithZipCodePatternFiltersResults() throws Exception {
+        mockMvc.perform(get("/api/cities").param("zipCodePattern", "1013*"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].zipCode").value("10130"))
+                .andExpect(jsonPath("$[1]").doesNotExist());
+    }
+
+
 }
