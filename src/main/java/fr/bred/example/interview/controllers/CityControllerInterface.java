@@ -12,15 +12,17 @@ public interface CityControllerInterface {
 
     @Operation(summary = "Liste toutes les villes")
     @GetMapping("/api/cities")
-    List<City> getCities();
-
-    @Operation(summary = "Recherche des villes par nom et/ou code postal",
-               description = "Filtre les villes selon un pattern sur le nom et/ou le code postal. Les jokers '*' sont acceptés.")
-    @GetMapping("/api/cities/search")
-    List<City> searchCities(
+    List<City> getCities(
             @Parameter(description = "Pattern du nom de la ville, joker '*' accepté", example = "MAR*")
             @RequestParam(required = false) String namePattern,
             @Parameter(description = "Pattern du code postal, joker '*' accepté", example = "1013*")
-            @RequestParam(required = false) String zipCodePattern);
+            @RequestParam(required = false) String zipCodePattern,
+            @Parameter(description = "Nombre maximum de résultats à retourner")
+            @RequestParam(defaultValue = "100") Integer limit,
+            @Parameter(description = "Index du premier résultat à retourner")
+            @RequestParam(defaultValue = "0") Integer start,
+            @Parameter(description = "Critère de tri des résultats")
+            @RequestParam(defaultValue = "name") String sort,
+            @Parameter(description = "Ordre de tri des résultats, 'asc' pour croissant, 'desc' pour décroissant")
+            @RequestParam(defaultValue = "asc") String order);
 }
-

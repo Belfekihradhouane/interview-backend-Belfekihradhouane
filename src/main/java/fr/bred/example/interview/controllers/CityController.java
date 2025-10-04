@@ -17,15 +17,14 @@ public class CityController implements CityControllerInterface {
     }
 
     @GetMapping("/api/cities")
-    public List<City> getCities() {
-        return service.getCities();
-    }
-
-    @GetMapping("/api/cities/search")
-    public List<City> searchCities(
+    public List<City> getCities(
             @RequestParam(required = false) String namePattern,
-            @RequestParam(required = false) String zipCodePattern) {
-        return service.searchCities(namePattern, zipCodePattern);
+            @RequestParam(required = false) String zipCodePattern,
+            @RequestParam(name = "_limit", required = false) Integer limit,
+            @RequestParam(name = "_start", required = false) Integer start,
+            @RequestParam(name = "_sort", required = false) String sort,
+            @RequestParam(name = "_order", required = false) String order
+    ) {
+        return service.getCities(namePattern, zipCodePattern, limit, start, sort, order);
     }
-
 }
