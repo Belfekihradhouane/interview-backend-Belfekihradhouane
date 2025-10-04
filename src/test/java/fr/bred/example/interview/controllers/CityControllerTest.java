@@ -1,4 +1,4 @@
-package fr.bred.example.interview;
+package fr.bred.example.interview.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,3 +68,4 @@ class CityControllerTest {
     }
 
 }
+
