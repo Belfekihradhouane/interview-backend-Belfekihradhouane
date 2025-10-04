@@ -109,27 +109,31 @@ public class CityService implements CityServiceInterface {
 
     @Override
     public City findNearestCity(String x, String y) {
-        double targetX, targetY;
+        Double targetX = parseCoordinate(x);
+        Double targetY = parseCoordinate(y);
+        if (targetX == null || targetY == null) return null;
+        return cityRepository.getCities().stream()
+            .filter(city -> city.getPoint() != null)
+            .filter(city -> parseCoordinate(city.getPoint().getX()) != null && parseCoordinate(city.getPoint().getY()) != null)
+            .min(Comparator.comparingDouble(city -> distance(targetX, targetY, parseCoordinate(city.getPoint().getX()), parseCoordinate(city.getPoint().getY()))))
+            .orElse(null);
+    }
+
+    /**
+     * Calcule la distance euclidienne entre deux points.
+     */
+    private double distance(double x1, double y1, double x2, double y2) {
+        return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
+    }
+
+    /**
+     * Parse une coordonnée en double, retourne null si erreur.
+     */
+    private Double parseCoordinate(String value) {
         try {
-            targetX = Double.parseDouble(x);
-            targetY = Double.parseDouble(y);
-        } catch (NumberFormatException e) {
+            return Double.parseDouble(value);
+        } catch (Exception e) {
             return null;
         }
-        City nearest = null;
-        double minDist = Double.MAX_VALUE;
-        for (City city : cityRepository.getCities()) {
-            if (city.getPoint() == null) continue;
-            try {
-                double cityX = Double.parseDouble(city.getPoint().getX());
-                double cityY = Double.parseDouble(city.getPoint().getY());
-                double dist = Math.pow(cityX - targetX, 2) + Math.pow(cityY - targetY, 2);
-                if (dist < minDist) {
-                    minDist = dist;
-                    nearest = city;
-                }
-            } catch (NumberFormatException ignore) {}
-        }
-        return nearest;
     }
 }
