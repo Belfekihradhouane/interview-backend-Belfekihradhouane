@@ -13,6 +13,7 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -110,5 +111,14 @@ class CityControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()", is(0)));
+    }
+
+    @Test
+    void findNearestCity_shouldNotReturnNull() throws Exception {
+        mockMvc.perform(get("/api/cities/nearest")
+                .param("x", "1.0")
+                .param("y", "2.0"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(""))); // TU KO attendu
     }
 }

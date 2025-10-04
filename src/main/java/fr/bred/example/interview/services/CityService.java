@@ -106,4 +106,9 @@ public class CityService implements CityServiceInterface {
         s = s.replace("*", ".*");
         return "^" + s + "$";
     }
+
+    @Override
+    public City findNearestCity(String x, String y) {
+        return new City("Fictive", "00000", null); // Pour TDD, le test assertNull sera KO
+    }
 }

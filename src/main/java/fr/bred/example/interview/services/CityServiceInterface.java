@@ -16,4 +16,12 @@ public interface CityServiceInterface {
      * @return Liste filtrée, paginée et triée de villes
      */
     List<City> getCities(String namePattern, String zipCodePattern, Integer limit, Integer start, String sort, String order);
+
+    /**
+     * Recherche la ville la plus proche d'un point (x, y).
+     * @param x coordonnée x
+     * @param y coordonnée y
+     * @return la ville la plus proche
+     */
+    City findNearestCity(String x, String y);
 }

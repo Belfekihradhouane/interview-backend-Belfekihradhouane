@@ -27,4 +27,9 @@ public class CityController implements CityControllerInterface {
     ) {
         return service.getCities(namePattern, zipCodePattern, limit, start, sort, order);
     }
+
+    @GetMapping("/api/cities/nearest")
+    public City findNearestCity(@RequestParam String x, @RequestParam String y) {
+        return null; // Pour TDD, le test findNearestCity_shouldNotReturnNull sera KO
+    }
 }

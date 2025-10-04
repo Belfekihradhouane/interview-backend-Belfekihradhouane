@@ -25,4 +25,12 @@ public interface CityControllerInterface {
             @RequestParam(defaultValue = "name") String sort,
             @Parameter(description = "Ordre de tri des résultats, 'asc' pour croissant, 'desc' pour décroissant")
             @RequestParam(defaultValue = "asc") String order);
+
+    /**
+     * Endpoint pour rechercher la ville la plus proche d'un point (x, y).
+     * @param x coordonnée x
+     * @param y coordonnée y
+     * @return la ville la plus proche
+     */
+    City findNearestCity(String x, String y);
 }
