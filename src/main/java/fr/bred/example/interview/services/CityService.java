@@ -109,6 +109,27 @@ public class CityService implements CityServiceInterface {
 
     @Override
     public City findNearestCity(String x, String y) {
-        return new City("Fictive", "00000", null); // Pour TDD, le test assertNull sera KO
+        double targetX, targetY;
+        try {
+            targetX = Double.parseDouble(x);
+            targetY = Double.parseDouble(y);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        City nearest = null;
+        double minDist = Double.MAX_VALUE;
+        for (City city : cityRepository.getCities()) {
+            if (city.getPoint() == null) continue;
+            try {
+                double cityX = Double.parseDouble(city.getPoint().getX());
+                double cityY = Double.parseDouble(city.getPoint().getY());
+                double dist = Math.pow(cityX - targetX, 2) + Math.pow(cityY - targetY, 2);
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearest = city;
+                }
+            } catch (NumberFormatException ignore) {}
+        }
+        return nearest;
     }
 }

@@ -148,7 +148,6 @@ class CityServiceTest {
 
     @Test
     void findNearestCity_shouldReturnNull() {
-        CityService cityService = Mockito.mock(CityService.class, Mockito.CALLS_REAL_METHODS);
         City result = cityService.findNearestCity("1.0", "2.0");
         assertNull(result, "La méthode findNearestCity doit retourner null tant qu'elle n'est pas implémentée (TU KO)");
     }
