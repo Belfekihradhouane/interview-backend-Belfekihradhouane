@@ -10,27 +10,31 @@ import java.util.List;
 
 public interface CityControllerInterface {
 
-    @Operation(summary = "Liste toutes les villes")
+    @Operation(summary = "List all cities")
     @GetMapping("/api/cities")
     List<City> getCities(
-            @Parameter(description = "Pattern du nom de la ville, joker '*' accepté", example = "MAR*")
+            @Parameter(description = "Wildcard pattern to search by name, case insensitive, '*' allowed", example = "PAR*")
             @RequestParam(required = false) String namePattern,
-            @Parameter(description = "Pattern du code postal, joker '*' accepté", example = "1013*")
+            @Parameter(description = "Wildcard pattern to search by zipCode, case insensitive, '*' allowed", example = "75*")
             @RequestParam(required = false) String zipCodePattern,
-            @Parameter(description = "Nombre maximum de résultats à retourner")
+            @Parameter(description = "Maximum number of results to return")
             @RequestParam(defaultValue = "100") Integer limit,
-            @Parameter(description = "Index du premier résultat à retourner")
+            @Parameter(description = "Index of the first result to return")
             @RequestParam(defaultValue = "0") Integer start,
-            @Parameter(description = "Critère de tri des résultats")
+            @Parameter(description = "Sort property")
             @RequestParam(defaultValue = "name") String sort,
-            @Parameter(description = "Ordre de tri des résultats, 'asc' pour croissant, 'desc' pour décroissant")
+            @Parameter(description = "Sort order, 'asc' for ascending, 'desc' for descending")
             @RequestParam(defaultValue = "asc") String order);
 
-    /**
-     * Endpoint pour rechercher la ville la plus proche d'un point (x, y).
-     * @param x coordonnée x
-     * @param y coordonnée y
-     * @return la ville la plus proche
-     */
-    City findNearestCity(String x, String y);
+    @Operation(
+        summary = "Search the nearest city to a given point",
+        description = "GET /api/cities/nearest endpoint to retrieve the nearest city to the provided coordinates. Coordinates must be provided as strings."
+    )
+    @GetMapping("/api/cities/nearest")
+    City findNearestCity(
+        @Parameter(description = "x coordinate of the search point", required = true)
+        @RequestParam String x,
+        @Parameter(description = "y coordinate of the search point", required = true)
+        @RequestParam String y
+    );
 }

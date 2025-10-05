@@ -30,6 +30,9 @@ public class CityController implements CityControllerInterface {
 
     @GetMapping("/api/cities/nearest")
     public City findNearestCity(@RequestParam String x, @RequestParam String y) {
+        if (x == null || y == null || x.isBlank() || y.isBlank()) {
+            throw new IllegalArgumentException("Coordinates x and y are required and must not be blank.");
+        }
         return service.findNearestCity(x, y);
     }
 }

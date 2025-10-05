@@ -109,6 +109,9 @@ public class CityService implements CityServiceInterface {
 
     @Override
     public City findNearestCity(String x, String y) {
+        if (x == null || y == null || x.isBlank() || y.isBlank()) {
+            throw new IllegalArgumentException("Coordinates x and y are required and must not be blank.");
+        }
         Double targetX = parseCoordinate(x);
         Double targetY = parseCoordinate(y);
         if (targetX == null || targetY == null) return null;
