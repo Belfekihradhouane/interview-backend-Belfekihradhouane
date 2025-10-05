@@ -3,12 +3,14 @@ package fr.bred.example.interview.services;
 
 import fr.bred.example.interview.models.City;
 import fr.bred.example.interview.repositories.CityRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CityService implements CityServiceInterface {
     private final CityRepository cityRepository;
@@ -29,6 +31,7 @@ public class CityService implements CityServiceInterface {
      */
     @Override
     public List<City> getCities(String namePattern, String zipCodePattern, Integer limit, Integer start, String sort, String order) {
+        log.info("getCities service called with namePattern={}, zipCodePattern={}, limit={}, start={}, sort={}, order={}", namePattern, zipCodePattern, limit, start, sort, order);
         // Filtrage par nom et code postal
         String nameRegex = wildcardToRegex(namePattern);
         String zipRegex = wildcardToRegex(zipCodePattern);
@@ -43,6 +46,7 @@ public class CityService implements CityServiceInterface {
         // Pagination
         filtered = paginate(filtered, limit, start);
 
+        log.info("getCities service result size={}", filtered != null ? filtered.size() : 0);
         return filtered;
     }
 
@@ -109,17 +113,22 @@ public class CityService implements CityServiceInterface {
 
     @Override
     public City findNearestCity(String x, String y) {
+        log.info("findNearestCity service called with x={}, y={}", x, y);
         if (x == null || y == null || x.isBlank() || y.isBlank()) {
             throw new IllegalArgumentException("Coordinates x and y are required and must not be blank.");
         }
+        City result = null;
         Double targetX = parseCoordinate(x);
         Double targetY = parseCoordinate(y);
-        if (targetX == null || targetY == null) return null;
-        return cityRepository.getCities().stream()
-            .filter(city -> city.getPoint() != null)
-            .filter(city -> parseCoordinate(city.getPoint().getX()) != null && parseCoordinate(city.getPoint().getY()) != null)
-            .min(Comparator.comparingDouble(city -> distance(targetX, targetY, parseCoordinate(city.getPoint().getX()), parseCoordinate(city.getPoint().getY()))))
-            .orElse(null);
+        if (targetX != null && targetY != null) {
+            result = cityRepository.getCities().stream()
+                .filter(city -> city.getPoint() != null)
+                .filter(city -> parseCoordinate(city.getPoint().getX()) != null && parseCoordinate(city.getPoint().getY()) != null)
+                .min(Comparator.comparingDouble(city -> distance(targetX, targetY, parseCoordinate(city.getPoint().getX()), parseCoordinate(city.getPoint().getY()))))
+                .orElse(null);
+        }
+        log.info("findNearestCity service result={}", result);
+        return result;
     }
 
     /**
