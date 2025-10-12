@@ -1,0 +1,23 @@
+[33mcommit 074f52205c01480f3b02aed59cbfc02725c3e66a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Belfekihradhouane <fekihradhouane@gmail.com>
+Date:   Fri Oct 3 00:53:08 2025 +0200
+
+    TDD: TDD: implement minimal CityController returning empty array
+
+[33mcommit 95f54d326e7cc6e12102ded36aef45dec93e7661[m
+Author: Belfekihradhouane <fekihradhouane@gmail.com>
+Date:   Fri Oct 3 00:38:09 2025 +0200
+
+    TDD: add failing test - GET /api/cities returns JSON array
+
+[33mcommit 7fd4bb4eac7878c93e376981fefade8bda9bf158[m
+Author: Belfekihradhouane <fekihradhouane@gmail.com>
+Date:   Thu Oct 2 20:27:56 2025 +0200
+
+    init: add pom.xml and project structure for cities-service (Java21, Spring Boot)
+
+[33mcommit e43a2a4bc7ab8b6d0a04bde0177c3ceb9f46ccbd[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Belfekihradhouane <fekihradhouane@gmail.com>
+Date:   Thu Oct 2 20:07:17 2025 +0200
+
+    Create README.md

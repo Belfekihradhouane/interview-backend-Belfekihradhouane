@@ -1,6 +1,7 @@
 package fr.bred.example.interview.controllers;
 
 import fr.bred.example.interview.models.City;
+import fr.bred.example.interview.models.SortType;
 import fr.bred.example.interview.services.CityService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,11 +25,11 @@ public class CityController implements CityControllerInterface {
             @RequestParam(required = false) String zipCodePattern,
             @RequestParam(name = "_limit", required = false) Integer limit,
             @RequestParam(name = "_start", required = false) Integer start,
-            @RequestParam(name = "_sort", required = false) String sort,
+            @RequestParam(name = "_sort", required = false) SortType sort,
             @RequestParam(name = "_order", required = false) String order
     ) {
         log.info("getCities called with namePattern={}, zipCodePattern={}, limit={}, start={}, sort={}, order={}", namePattern, zipCodePattern, limit, start, sort, order);
-        List<City> result = service.getCities(namePattern, zipCodePattern, limit, start, sort, order);
+        List<City> result = service.getCities(namePattern, zipCodePattern, limit, start, sort != null ? sort.name() : null, order);
         log.info("getCities result size={}", result != null ? result.size() : 0);
         return result;
     }

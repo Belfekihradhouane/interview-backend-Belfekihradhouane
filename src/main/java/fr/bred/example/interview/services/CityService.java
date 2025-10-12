@@ -70,15 +70,20 @@ public class CityService implements CityServiceInterface {
      * @return Liste triée des villes
      */
     private List<City> sortCities(List<City> cities, String sort, String order) {
-        if (sort == null || (!sort.equals("name") && !sort.equals("zipCode"))) return cities;
-        Comparator<City> comparator = sort.equals("name") ?
-            Comparator.comparing(c -> c.getName() == null ? "" : c.getName().toLowerCase()) :
-            Comparator.comparing(c -> c.getZipCode() == null ? "" : c.getZipCode().toLowerCase());
-        if (order != null && order.equalsIgnoreCase("asc")) {
-            return cities.stream().sorted(comparator).collect(Collectors.toList());
-        } else {
-            return cities.stream().sorted(comparator.reversed()).collect(Collectors.toList());
+        // Détermination du champ de tri
+        String sortField = (sort != null && (sort.equals("name") || sort.equals("zipCode"))) ? sort : "name";
+        Comparator<City> comparator = sortField.equals("zipCode")
+            ? Comparator.comparing(c -> c.getZipCode() == null ? "" : c.getZipCode().toLowerCase())
+            : Comparator.comparing(c -> c.getName() == null ? "" : c.getName().toLowerCase());
+        // Si aucun tri à appliquer (ni sort ni order), retourner la liste telle quelle
+        if ((sort == null || (!sort.equals("name") && !sort.equals("zipCode"))) && (order == null || (!order.equalsIgnoreCase("asc") && !order.equalsIgnoreCase("desc")))) {
+            return cities;
         }
+        // Appliquer l'ordre
+        if (order != null && order.equalsIgnoreCase("desc")) {
+            comparator = comparator.reversed();
+        }
+        return cities.stream().sorted(comparator).collect(Collectors.toList());
     }
 
     /**

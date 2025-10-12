@@ -1,6 +1,7 @@
 package fr.bred.example.interview.controllers;
 
 import fr.bred.example.interview.models.City;
+import fr.bred.example.interview.models.SortType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public interface CityControllerInterface {
             @Parameter(description = "Index of the first result to return")
             @RequestParam(defaultValue = "0") Integer start,
             @Parameter(description = "Sort property")
-            @RequestParam(defaultValue = "name") String sort,
+            @RequestParam(defaultValue = "name") SortType sort,
             @Parameter(description = "Sort order, 'asc' for ascending, 'desc' for descending")
             @RequestParam(defaultValue = "asc") String order);
 
